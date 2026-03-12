@@ -1,0 +1,19 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: backblaze
+  namespace: immich
+spec:
+  retentionPolicy: "30d"
+  configuration:
+    destinationPath: "s3://CloudNativePG-Talos/"
+    endpointURL: "https://s4.us-west-004.backblazeb2.com"
+    s3Credentials:
+      accessKeyId:
+        name: backblaze
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: backblaze
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip

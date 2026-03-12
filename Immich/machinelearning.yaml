@@ -1,0 +1,73 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: immichml
+    app.kubernetes.io/instance: immichml
+  name: immichml
+  namespace: immich
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: immichml
+  template:
+    metadata:
+      labels:
+        app: immichml
+      annotations:
+        diun.enable: "true"
+    spec:
+      nodeSelector:
+        agent: "true"
+      containers:
+      - image: ghcr.io/immich-app/immich-machine-learning:release-openvino
+        imagePullPolicy: Always
+        name: immichml
+        env:
+          - name: TZ
+            value: "America/Chicago"
+          - name: immichml_VERSION
+            value: "release"
+          - name: REDIS_HOSTNAME
+            value: "redis-replication-master.ot-operators"
+          - name: REDIS_DBINDEX
+            value: "1"
+        ports:
+        - containerPort: 3003
+          name: immichml-http
+          protocol: TCP
+        resources:
+          limits:
+            gpu.intel.com/i915: "1"
+            cpu: "3000m"
+            memory: "6Gi"
+          requests:
+            gpu.intel.com/i915: "1"
+            cpu: "500m"
+            memory: "0.5Gi"
+        volumeMounts:
+        - mountPath: /cache
+          name: immichml
+      restartPolicy: Always
+      volumes:
+      - name: immichml
+        persistentVolumeClaim:
+          claimName: immichml
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: immichml
+  name: immichml
+  namespace: immich
+spec:
+  ports:
+  - name: immichml
+    port: 3003
+    protocol: TCP
+    targetPort: 3003
+  selector:
+    app: immichml
+  type: ClusterIP

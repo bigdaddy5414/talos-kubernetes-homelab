@@ -1,0 +1,16 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: ceph
+  namespace: monitoring
+  labels:
+    prometheus: system-monitoring-prometheus
+spec:
+  staticConfigs:
+    - labels:
+        job: ceph
+      targets:
+        - IP1:9283
+        - IP2:9283
+        - IP3:9283
+        

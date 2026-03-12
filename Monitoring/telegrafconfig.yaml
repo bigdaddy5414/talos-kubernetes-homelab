@@ -29,7 +29,7 @@ data:
       ## The base URL of the local Apex(es). If you specify more than one server, they will
       ## be differentiated by the "source" tag.
       servers = [
-        "http://10.0.107.61",
+        "URL",
       ]
 
       ## The response_timeout specifies how long to wait for a reply from the Apex.

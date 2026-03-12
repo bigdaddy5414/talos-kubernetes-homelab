@@ -1,0 +1,17 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+metadata:
+  name: mailcow
+  namespace: monitoring
+  labels:
+    prometheus: system-monitoring-prometheus
+spec:
+  staticConfigs:
+    - labels:
+        job: mailcow
+      targets:
+        - IP:9099
+  params:
+    MAILCOW_EXPORTER_HOST: [""]
+    MAILCOW_EXPORTER_API_KEY: [""]
+    token: [""]

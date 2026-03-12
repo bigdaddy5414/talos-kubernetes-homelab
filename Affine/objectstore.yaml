@@ -1,0 +1,19 @@
+apiVersion: barmancloud.cnpg.io/v1
+kind: ObjectStore
+metadata:
+  name: backblaze
+  namespace: affine
+spec:
+  retentionPolicy: "30d"
+  configuration:
+    destinationPath: "s3://REPOSITORY"
+    endpointURL: "https://s3.us-west-003.backblazeb2.com"
+    s3Credentials:
+      accessKeyId:
+        name: backblaze
+        key: ACCESS_KEY_ID
+      secretAccessKey:
+        name: backblaze
+        key: ACCESS_SECRET_KEY
+    wal:
+      compression: gzip

@@ -1,0 +1,27 @@
+apiVersion: postgresql.cnpg.io/v1
+kind: Cluster
+metadata:
+  name: affine-db
+  namespace: affine
+spec:
+  instances: 1
+  plugins:
+  - name: barman-cloud.cloudnative-pg.io
+    isWALArchiver: true
+    parameters:
+      barmanObjectName: backblaze
+  imageCatalogRef:
+    apiGroup: postgresql.cnpg.io
+    kind: ClusterImageCatalog
+    name: postgresql
+    major: 17
+  bootstrap:
+    initdb:
+      database: app
+      owner: app
+  enableSuperuserAccess: true
+  storage:
+    size: 1Gi
+
+  monitoring:
+    enablePodMonitor: true

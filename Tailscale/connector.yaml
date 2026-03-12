@@ -1,0 +1,14 @@
+apiVersion: tailscale.com/v1alpha1
+kind: Connector
+metadata:
+  name: talos-cluster
+spec:
+  hostname: talos-cluster
+  proxyClass: talos
+  exitNode: true
+  subnetRouter:
+    advertiseRoutes:
+      - "10.204.1.0/24"
+      - "10.204.2.0/24"
+      - "10.204.3.0/24"
+      - "10.204.6.0/24"

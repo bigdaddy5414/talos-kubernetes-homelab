@@ -1,0 +1,8 @@
+apiVersion: tailscale.com/v1alpha1
+kind: ProxyGroup
+metadata:
+  name: talos-proxies
+spec:
+  type: egress
+  replicas: 3
+  proxyClass: talos

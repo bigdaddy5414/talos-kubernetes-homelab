@@ -1,0 +1,67 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: pgadmin
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: pgadmin
+    app.kubernetes.io/instance: pgadmin
+  name: pgadmin
+  namespace: pgadmin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pgadmin
+  template:
+    metadata:
+      labels:
+        app: pgadmin
+      annotations:
+        diun.enable: "true"
+    spec:
+      nodeSelector:
+        agent: "true"
+      containers:
+      - image: dpage/pgadmin4
+        imagePullPolicy: Always
+        name: pgadmin
+        env:
+          - name: PGADMIN_DEFAULT_EMAIL
+            value: "EMAIL"
+          - name: PGADMIN_DEFAULT_PASSWORD
+            value: "PASSWORD"
+        ports:
+        - containerPort: 80
+          name: pgadmin-http
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/lib/pgadmin
+          name: pgadmin
+      restartPolicy: Always
+      volumes:
+      - name: pgadmin
+        persistentVolumeClaim:
+          claimName: pgadmin
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: pgadmin
+  name: pgadmin-web
+  namespace: pgadmin
+spec:
+  ports:
+  - name: pgadmin-web
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: pgadmin
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  loadBalancerIP: URL

@@ -1,0 +1,36 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: telegraf-config
+  namespace: monitoring
+data:
+  telegraf.conf: |+
+    [[outputs.influxdb]]
+      urls = ["$INFLUXDB_URL"]
+      database = "$INFLUXDB_DB"
+      username = "$INFLUXDB_USER"
+      password = "$INFLUXDB_USER_PASSWORD"
+    [[inputs.statsd]]
+      max_tcp_connections = 250
+      tcp_keep_alive = false
+      service_address = ":8125"
+      delete_gauges = true
+      delete_counters = true
+      delete_sets = true
+      delete_timings = true
+      metric_separator = "."
+      allowed_pending_messages = 10000
+      percentile_limit = 1000
+      read_buffer_size = 65535
+    [[inputs.neptune_apex]]
+      ## The Neptune Apex plugin reads the publicly available status.xml data from a local Apex.
+      ## Measurements will be logged under "apex".
+
+      ## The base URL of the local Apex(es). If you specify more than one server, they will
+      ## be differentiated by the "source" tag.
+      servers = [
+        "http://10.0.107.61",
+      ]
+
+      ## The response_timeout specifies how long to wait for a reply from the Apex.
+      #response_timeout = "5s"

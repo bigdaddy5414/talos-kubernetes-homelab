@@ -1,0 +1,63 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: influxdb
+    app.kubernetes.io/instance: influxdb
+  name: influxdb
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+      annotations:
+        diun.enable: "true"
+    spec:
+      nodeSelector:
+        agent: "true"
+      hostname: "influxdb"
+      containers:
+      - image: docker.io/influxdb:1.6.4
+        imagePullPolicy: Always
+        name: influxdb
+        ports:
+        - containerPort: 8086
+          name: maintain-http
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /var/lib/influxdb
+          name: influxdb
+      restartPolicy: Always
+      volumes:
+      - name: influxdb
+        persistentVolumeClaim:
+          claimName: influxdb
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: influxdb
+  name: influxdb-web
+  namespace: monitoring
+spec:
+  ports:
+  - name: influxdb-web
+    port: 8086
+    protocol: TCP
+    targetPort: 8086
+  selector:
+    app: influxdb
+  type: LoadBalancer
+  externalTrafficPolicy: Local
+  loadBalancerIP: URL

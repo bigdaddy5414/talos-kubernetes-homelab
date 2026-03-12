@@ -1,0 +1,10 @@
+context: talos-proxmox-cluster
+contexts:
+    talos-proxmox-cluster:
+        endpoints:
+            - 10.0.101.151
+        nodes:
+            - 10.0.101.151
+        ca:
+        crt:
+        key:

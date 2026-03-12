@@ -1,1 +1,41 @@
+# Talos Kubernetes Homelab
 
+Production-style Kubernetes cluster running Talos Linux in a home lab environment.
+
+## Infrastructure
+
+- 4-node Kubernetes cluster
+- Talos Linux immutable OS
+- Git-based configuration workflows
+- Containerized workloads deployed with Kubernetes
+
+## Monitoring
+
+- Prometheus metrics collection
+- Grafana dashboards for infrastructure visualization
+
+## Automation
+
+- Ansible used for infrastructure automation and deployments
+- Git used for configuration management
+- ArgoCD
+
+## Networking
+
+- VLAN segmented network
+- UniFi gateway and switching
+- Internal service routing and cluster networking
+- Tailscale
+- Pangolin
+- Traefik
+- Crowdsec
+
+## Purpose
+
+This lab environment is used to experiment with:
+
+- Kubernetes cluster operations
+- Infrastructure automation
+- monitoring and observability platforms
+- Git-based infrastructure workflows
+- Running home automations
